@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -14,13 +15,13 @@ AItem::AItem() :
 	ItemRarity(EItemRarity::EIR_Common),
 	ItemState(EItemState::EIS_PickUp)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	ItemMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ItemMesh"));
 	SetRootComponent(ItemMesh);
 
-	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox")); 
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 	CollisionBox->SetupAttachment(ItemMesh);
 	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	CollisionBox->SetCollisionResponseToChannel(
@@ -93,11 +94,11 @@ void AItem::SetActiveStars()
 
 	switch (ItemRarity) {
 	case EItemRarity::EIR_Damaged:
-		ActiveStars[1] = true; 
+		ActiveStars[1] = true;
 		break;
 	case EItemRarity::EIR_Common:
 		ActiveStars[1] = true;
-		ActiveStars[2] = true; 
+		ActiveStars[2] = true;
 		break;
 	case EItemRarity::EIR_Uncommon:
 		ActiveStars[1] = true;
@@ -141,7 +142,7 @@ void AItem::SetItemProperties(EItemState State)
 			ECollisionResponse::ECR_Block);
 		CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		break;
-		
+
 	case EItemState::EIS_Equipped:
 		PickUpWidget->SetVisibility(false);
 		ItemMesh->SetSimulatePhysics(false);
@@ -149,7 +150,7 @@ void AItem::SetItemProperties(EItemState State)
 		ItemMesh->SetVisibility(true);
 		ItemMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		
+
 
 		AreaSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		AreaSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -172,7 +173,7 @@ void AItem::SetItemProperties(EItemState State)
 
 		CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		break; 
+		break;
 	}
 
 }

@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -47,26 +48,26 @@ AShooterChar::AShooterChar() :
 	bFireButtonPressed(false),
 	bShouldTraceForItems(false)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	/** Create CameraSpringArm */
 	CameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
 	CameraSpringArm->SetupAttachment(RootComponent);
 	CameraSpringArm->TargetArmLength = 200.f; // camera follows at this distance behind the char
-	CameraSpringArm->bUsePawnControlRotation = true; 
+	CameraSpringArm->bUsePawnControlRotation = true;
 	CameraSpringArm->SocketOffset = FVector(0.f, 50.f, 65.f);
 
 	/** Create FollowCamera*/
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraSpringArm, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false; 
+	FollowCamera->bUsePawnControlRotation = false;
 
 
 	//DON"T ROTATE WHEN THE CONTROLLER ROTATE
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = true; 
-	bUseControllerRotationRoll = false; 
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationRoll = false;
 
 	//Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = false; // character moves in the direction of input.
@@ -85,8 +86,8 @@ void AShooterChar::BeginPlay()
 	if (FollowCamera) {
 
 		CameraDefaultFOV = GetFollowCamera()->FieldOfView;
-		CameraCurrentFOV = CameraDefaultFOV; 
-	
+		CameraCurrentFOV = CameraDefaultFOV;
+
 	}
 	//spawn default and equip it 
 	EquipWeapon(SpawnDefaultWeapon());
@@ -146,7 +147,7 @@ void AShooterChar::Turn(float Value)
 
 	if (bAiming) {
 
-		TurnScaleFactor = MouseAimingTurnRate; 
+		TurnScaleFactor = MouseAimingTurnRate;
 
 	}
 	else {
@@ -181,7 +182,7 @@ void AShooterChar::LookUp(float Value)
 
 void AShooterChar::FireWeapon()
 {
-	
+
 	if (FireSound) {
 		UGameplayStatics::PlaySound2D(this, FireSound);
 	}
@@ -194,7 +195,7 @@ void AShooterChar::FireWeapon()
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, SocketTransform);
 		}
 
-		FVector BeamEnd; 
+		FVector BeamEnd;
 		bool bBeamEnd = GetBeamEndLocation(SocketTransform.GetLocation(), BeamEnd);
 
 		if (bBeamEnd) {
@@ -210,13 +211,13 @@ void AShooterChar::FireWeapon()
 			}
 
 			UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(
-					GetWorld(),
-					BeamParticles,
-					SocketTransform);
+				GetWorld(),
+				BeamParticles,
+				SocketTransform);
 
 			if (Beam) {
 
-					Beam->SetVectorParameter(FName("Target"), BeamEnd);
+				Beam->SetVectorParameter(FName("Target"), BeamEnd);
 
 			}
 		}
@@ -242,9 +243,9 @@ bool AShooterChar::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVect
 	bool bCrosshairHit = TraceUndercrosshairs(CrosshairHitResult, OutBeamLocation);
 
 	if (bCrosshairHit) {
-	
+
 		OutBeamLocation = CrosshairHitResult.Location;
-	
+
 	}
 	else {
 
@@ -266,9 +267,9 @@ bool AShooterChar::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVect
 	if (WeaponTraceHit.bBlockingHit) {
 
 		OutBeamLocation = WeaponTraceHit.Location;
-		return true; 
+		return true;
 	}
-	return false; 
+	return false;
 
 }
 
@@ -282,7 +283,7 @@ void AShooterChar::AimingButtonPressed()
 void AShooterChar::AimingButtonReleased()
 {
 
-	bAiming = false; 
+	bAiming = false;
 
 }
 
@@ -331,7 +332,7 @@ void AShooterChar::CalculateCrosshairSpread(float DeltaTime)
 	FVector Velocity{ GetVelocity() };
 	Velocity.Z = 0.f;
 
-	CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(WalkSpeedRange, 
+	CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(WalkSpeedRange,
 		VelocityMultiplierRange,
 		Velocity.Size());
 
@@ -394,8 +395,8 @@ void AShooterChar::CalculateCrosshairSpread(float DeltaTime)
 
 	}
 
-	CrosshairSpreadMultiplier = 0.5f + 
-		CrosshairVelocityFactor + 
+	CrosshairSpreadMultiplier = 0.5f +
+		CrosshairVelocityFactor +
 		CrosshairInAirFactor - CrosshairAimFactor + CrosshairShootingFactor;
 
 }
@@ -403,7 +404,7 @@ void AShooterChar::CalculateCrosshairSpread(float DeltaTime)
 void AShooterChar::StartCrosshairBulletFire()
 {
 
-	bFiringBullet = true; 
+	bFiringBullet = true;
 
 	GetWorldTimerManager().SetTimer(CrosshairShootTimer,
 		this,
@@ -422,7 +423,7 @@ void AShooterChar::FinishCrosshairBulletFire()
 void AShooterChar::FireButtonPressed()
 {
 
-	bFireButtonPressed = true; 
+	bFireButtonPressed = true;
 	StartFireTimer();
 
 }
@@ -430,7 +431,7 @@ void AShooterChar::FireButtonPressed()
 void AShooterChar::FireButtonReleased()
 {
 
-	bFireButtonPressed = false; 
+	bFireButtonPressed = false;
 
 }
 
@@ -439,7 +440,7 @@ void AShooterChar::StartFireTimer()
 
 	if (bShouldFire) {
 		FireWeapon();
-		bShouldFire = false; 
+		bShouldFire = false;
 		GetWorldTimerManager().SetTimer(
 			AutomaticFireTimer,
 			this,
@@ -453,7 +454,7 @@ void AShooterChar::StartFireTimer()
 void AShooterChar::AutomaticFireReset()
 {
 
-	bShouldFire = true; 
+	bShouldFire = true;
 	if (bFireButtonPressed) {
 		StartFireTimer();
 	}
@@ -508,7 +509,7 @@ void AShooterChar::TraceForItems()
 		TraceUndercrosshairs(ItemTraceResult, HitLocation);
 
 		if (ItemTraceResult.bBlockingHit) {
-			
+
 			TraceHitItem = Cast<AItem>(ItemTraceResult.Actor);
 			if (TraceHitItem && TraceHitItem->GetPickupWidget()) {
 
@@ -598,7 +599,7 @@ void AShooterChar::SwapWeapon(AWeapon* WeaponToSwap)
 
 	DropWeapon();
 	EquipWeapon(WeaponToSwap);
-	TraceHitItem = nullptr; 
+	TraceHitItem = nullptr;
 	TraceHitItemLastFrame = nullptr;
 
 }
@@ -651,15 +652,15 @@ void AShooterChar::IncrementOverlappedItemCount(int8 Ammount)
 {
 
 	if (OverlappedItemCount + Ammount <= 0) {
-		
-		OverlappedItemCount = 0; 
-		bShouldTraceForItems = false; 
+
+		OverlappedItemCount = 0;
+		bShouldTraceForItems = false;
 
 	}
 	else {
 
-		OverlappedItemCount += Ammount; 
-		bShouldTraceForItems = true; 
+		OverlappedItemCount += Ammount;
+		bShouldTraceForItems = true;
 
 	}
 
