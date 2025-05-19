@@ -46,11 +46,11 @@ void AItem::BeginPlay()
 	}
 	//set active stars array based on rarity
 	SetActiveStars();
-
-	//Setup overlap for AreaSphere
-	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnSphereOverlap);
-	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereEndOverlap);
-
+	if (this) {
+		//Setup overlap for AreaSphere
+		AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnSphereOverlap);
+		AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereEndOverlap);
+	}
 	SetItemProperties(ItemState);
 }
 
